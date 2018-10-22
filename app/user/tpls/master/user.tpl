@@ -25,7 +25,7 @@
 							<a data-toggle="dropdown" class="btn btn-primary dropdown-toggle" href="#">添加用户&nbsp;<strong class="caret"></strong></a>
 							<ul class="dropdown-menu">
 								<li><a href="index.php?user-master-user-add">单个用户</a></li>
-								<li><a href="index.php?user-master-user-batadd">从csv文件导入</a></li>
+								<li><a href="index.php?user-master-user-batadd">从EXCEL文件导入</a></li>
 							</ul>
 						</span>
 					</h4>

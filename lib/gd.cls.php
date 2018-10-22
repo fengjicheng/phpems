@@ -1,5 +1,5 @@
 <?php
-
+//ÑéÖ¤Âë
 class ggd
 {
 	public $bd;
