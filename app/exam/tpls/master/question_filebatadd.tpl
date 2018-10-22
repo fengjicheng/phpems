@@ -15,13 +15,13 @@
 						<ol class="breadcrumb">
 							<li><a href="index.php?{x2;$_app}-master">{x2;$apps[$_app]['appname']}</a></li>
 							<li><a href="index.php?{x2;$_app}-master-questions&page={x2;$page}{x2;$u}">普通试题管理</a></li>
-							<li class="active">CSV添加普通试题</li>
+							<li class="active">EXCEL添加普通试题</li>
 						</ol>
 					</div>
 				</div>
 				<div class="box itembox" style="padding-top:10px;margin-bottom:0px;">
 					<h4 class="title" style="padding:10px;">
-						CSV添加普通试题
+						EXCEL添加普通试题
 						<a class="btn btn-primary pull-right" href="index.php?{x2;$_app}-master-questions&page={x2;$page}{x2;$u}">普通试题管理</a>
 					</h4>
 					<form action="index.php?exam-master-questions-filebataddquestion" method="post" class="form-horizontal">
@@ -35,7 +35,7 @@
 							<label for="knowsid" class="control-label col-sm-2">知识点ID</label>
 							<div class="col-sm-3">
 								<input class="form-control" type="text" name="knowsid" id="knowsid" value="0"/>
-								<span class="help-block">如果您的知识点ID和CSV文件中的知识点ID不同，请在此填写您希望加入的知识点ID，否则请填写0</span>
+								<span class="help-block">如果您的知识点ID和EXCEL文件中的知识点ID不同，请在此填写您希望加入的知识点ID，否则请填写0</span>
 							</div>
 						</div>
 						<div class="form-group">
@@ -58,8 +58,8 @@
 						                </div>
 						            </div>
 						        </script>
-						        <div class="fineuploader" attr-type="files" attr-template="pe-template-uploadfile" attr-ftype="csv"></div>
-								<span class="help-block">注意：导入文件必须为csv文件，可用excel另存为csv，为保证程序正常导入，每个CSV文件请不要超过2M，否则可能导入失败</span>
+						        <div class="fineuploader" attr-type="files" attr-template="pe-template-uploadfile" attr-ftype="xls,xlsx"></div>
+								<span class="help-block">注意：每个EXCEL文件请不要超过2M&emsp;&emsp;<a style="color:red" href="app/core/styles/file/questions_tpl.xlsx">批导模板</a></span>
 							</div>
 						</div>
 						<div class="form-group">

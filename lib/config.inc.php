@@ -38,8 +38,8 @@ define('ALIKEY','***');
 define('ALIACC','i@oiuv.cn');
  
 //企业微信设置
-define('CorpId','***'); //企业号CorpId
-define('CorpSecret','***'); //企业号凭证密钥
+define('CorpId','wx58f12779bc0cba3a'); //企业号CorpId
+define('CorpSecret','uyqisWaxr0y7orsmzLYcdl8SNb0-T0muMBP-oBdmMFrylTJAAZK7T4ow-QweJxFV'); //企业号凭证密钥
 define('AppId','i@oiuv.cn'); //开放平台AppId
 define('AppSecret','i@oiuv.cn'); //开放平台凭证密钥
 
@@ -48,7 +48,11 @@ define('Contact','http://www.qhyhgf.com'); //联系我们
 define('CustomerCompanyName','青海盐湖工业股份有限公司'); //公司名称
 define('SystemName','盐湖股份在线模拟考试系统'); //系统名称
 define('SoftName','盐湖股份'); //软件名称
-define('Copyright','<a href="">Copyright © qhyhgf.com  2018-2023</a>'); //软件名称
+define('AuthorName','盐湖股份信息中心开发组'); //开发者名称
+define('AuthorPhone','0979-8448118'); //开发者电话
+define('Copyright','<a href="">Copyright © qhyhgf.com  2018-2023</a>'); //版权
+define('MasterLogo','<h1 style="color:#337AB7;"><img src="app/core/styles/img/logo3.png" style="height:60px;margin-top:-10px;"/>&nbsp;盐湖股份管理平台</h1>'); //后台管理logo
+define('AppLogo','<h1 style="font-size:42px;color:#337AB7;"><img src="app/core/styles/img/logo3.png" style="height:60px;margin-top:-10px;">&nbsp;<b>盐湖股份</b></h1>'); //前台logo
 
 
 

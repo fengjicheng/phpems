@@ -301,39 +301,61 @@ class exam_exam
 		$this->db->exec($sql);
 		return $r;
 	}
-
+    //批量通过excel导入题库到系统
 	public function importQuestionBat($uploadfile,$tknowsid,$questionparent = 0)
 	{
+	    if(!file_exists($uploadfile)) {
+	        exit('no file!');
+	        return false;
+	    }
+	    //文件的扩展名
+	    $ext = strtolower(pathinfo($uploadfile,PATHINFO_EXTENSION));
+	    if($ext == 'xlsx'){
+	        $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xlsx');
+	    }elseif($ext == 'xls'){
+	        $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xls');
+	    }
+	    $reader->setReadDataOnly(TRUE);
+	    $spreadsheet = $reader->load($uploadfile); //载入excel表格
+	    $worksheet = $spreadsheet->getActiveSheet();
+	    $highestRow = $worksheet->getHighestRow(); // 总行数
+	    $highestColumn = $worksheet->getHighestColumn(); // 总列数
+	    $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn); // e.g. 5
+	    //exit(json_encode($highestColumnIndex));
+	    
 		$this->session = $this->G->make('session');
         $this->_user = $this->session->getSessionUser();
         $userid = $this->_user['sessionuserid'];
         $username = $this->_user['sessionusername'];
-	    $handle = fopen($uploadfile,"r");
 		$qrid = 0;
-		while ($data = fgetcsv($handle))
+		for ($row = 2; $row <= $highestRow; ++$row)
 		{
+		    if (empty($worksheet->getCellByColumnAndRow(1, $row)->getValue())) {
+		        continue;
+		    }
 			$args = array();
-			$question = $data;
-			if(count($question) >= 6)
+			if($highestColumnIndex >= 6)
 			{
-				$isqr = intval(trim($question[8]," \n\t"));
+			    //是否题帽提
+			    $isqr = intval(trim($worksheet->getCellByColumnAndRow(9, $row)->getValue()," \n\t"));
 				if($isqr)
 				{
-					$istitle = intval(trim($question[9]," \n\t"));
+				    //是否题帽
+				    $istitle = intval(trim($worksheet->getCellByColumnAndRow(10, $row)->getValue()," \n\t"));
 					if($istitle)
 					{
 						if($qrid)
 						{
 							$this->resetRowsQuestionNumber($qrid);
 						}
-						$args['qrtype'] = $question[0];
-						$args['qrquestion'] = $this->ev->addSlashes(htmlspecialchars(iconv("GBK","UTF-8//IGNORE",trim(nl2br($question[1])," \n\t"))));
-						$args['qrlevel'] = $question[7];
+						$args['qrtype'] = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
+						$args['qrquestion'] = $this->ev->addSlashes(htmlspecialchars(trim(nl2br($worksheet->getCellByColumnAndRow(2, $row)->getValue())," \n\t")));
+						$args['qrlevel'] = $worksheet->getCellByColumnAndRow(8, $row)->getValue();
 						$args['qrtime'] = TIME;
                         $args['qruserid'] = $userid;
                         $args['qrusername'] = $username;
 						if(!$tknowsid)
-						$questionknowsid = trim($question[6]," \n\t");
+						    $questionknowsid = trim($worksheet->getCellByColumnAndRow(7, $row)->getValue()," \n\t");
 						else
 						$questionknowsid = $tknowsid;
 						if($questionknowsid)
@@ -356,34 +378,35 @@ class exam_exam
 					}
 					else
 					{
-						$args['questiontype'] = intval($question[0]);
-						$args['question'] = $this->ev->addSlashes(htmlspecialchars(iconv("GBK","UTF-8//IGNORE",trim($question[1]," \n\t"))));
-						$args['questionselect'] = $this->ev->addSlashes(htmlspecialchars(iconv("GBK","UTF-8//IGNORE",trim($question[2]," \n\t"))));
-						$args['questionselectnumber'] = intval(trim($question[3]," \n\t"));
-						$args['questionanswer'] = $this->ev->addSlashes(htmlspecialchars(iconv("GBK","UTF-8//IGNORE",trim($question[4]," \n\t"))));
-						$args['questiondescribe'] = $this->ev->addSlashes(htmlspecialchars(iconv("GBK","UTF-8//IGNORE",trim($question[5]," \n\t"))));
+					    $args['questiontype'] = intval($worksheet->getCellByColumnAndRow(1, $row)->getValue());
+					    $args['question'] = $this->ev->addSlashes(htmlspecialchars(trim($worksheet->getCellByColumnAndRow(2, $row)->getValue()," \n\t")));
+					    $args['questionselect'] = $this->ev->addSlashes(htmlspecialchars(trim($worksheet->getCellByColumnAndRow(3, $row)->getValue()," \n\t")));
+					    $args['questionselectnumber'] = intval(trim($worksheet->getCellByColumnAndRow(4, $row)->getValue()," \n\t"));
+					    $args['questionanswer'] = $this->ev->addSlashes(htmlspecialchars(trim($worksheet->getCellByColumnAndRow(5, $row)->getValue()," \n\t")));
+					    $args['questiondescribe'] = $this->ev->addSlashes(htmlspecialchars(trim($worksheet->getCellByColumnAndRow(6, $row)->getValue()," \n\t")));
 						if($qrid)$args['questionparent'] = $qrid;
-						$args['questionlevel'] = intval(trim($question[7]," \n\t"));
+						$args['questionlevel'] = intval(trim($worksheet->getCellByColumnAndRow(8, $row)->getValue()," \n\t"));
 						$args['questioncreatetime'] = TIME;
                         $args['questionuserid'] = $userid;
                         $args['questionusername'] = $username;
 						$this->addQuestions($args);
 					}
 				}
+				//不是题帽提
 				else
 				{
-					$args['questiontype'] = intval($question[0]);
-					$args['question'] = $this->ev->addSlashes(htmlspecialchars(iconv("GBK","UTF-8//IGNORE",trim($question[1]," \n\t"))));
-					$args['questionselect'] = $this->ev->addSlashes(htmlspecialchars(iconv("GBK","UTF-8//IGNORE",trim($question[2]," \n\t"))));
-					$args['questionselectnumber'] = intval(trim($question[3]," \n\t"));
-					$args['questionanswer'] = $this->ev->addSlashes(htmlspecialchars(iconv("GBK","UTF-8//IGNORE",trim($question[4]," \n\t"))));
-					$args['questiondescribe'] = $this->ev->addSlashes(htmlspecialchars(iconv("GBK","UTF-8//IGNORE",trim($question[5]," \n\t"))));
+				    $args['questiontype'] = intval($worksheet->getCellByColumnAndRow(1, $row)->getValue());
+				    $args['question'] = $this->ev->addSlashes(htmlspecialchars(trim($worksheet->getCellByColumnAndRow(2, $row)->getValue()," \n\t")));
+				    $args['questionselect'] = $this->ev->addSlashes(htmlspecialchars(trim($worksheet->getCellByColumnAndRow(3, $row)->getValue()," \n\t")));
+				    $args['questionselectnumber'] = intval(trim($worksheet->getCellByColumnAndRow(4, $row)->getValue()," \n\t"));
+				    $args['questionanswer'] = $this->ev->addSlashes(htmlspecialchars(trim($worksheet->getCellByColumnAndRow(5, $row)->getValue()," \n\t")));
+				    $args['questiondescribe'] = $this->ev->addSlashes(htmlspecialchars(trim($worksheet->getCellByColumnAndRow(6, $row)->getValue()," \n\t")));
                     $args['questionuserid'] = $userid;
                     $args['questionusername'] = $username;
 					if(!$tknowsid)
-					$questionknowsid = trim($question[6]," \n\t");
+					    $questionknowsid = trim($worksheet->getCellByColumnAndRow(7, $row)->getValue()," \n\t");
 					else
-					$questionknowsid = $tknowsid;
+					   $questionknowsid = $tknowsid;
 					if($questionknowsid)
 					{
 						$questionknowsid = explode(',',$questionknowsid);
@@ -401,7 +424,7 @@ class exam_exam
 						}
 					}
 					if($questionparent)$args['questionparent'] = $questionparent;
-					$args['questionlevel'] = intval(trim($question[7]," \n\t"));
+					$args['questionlevel'] = intval(trim($worksheet->getCellByColumnAndRow(8, $row)->getValue()," \n\t"));
 					$args['questioncreatetime'] = TIME;
 					$this->addQuestions($args);
 				}

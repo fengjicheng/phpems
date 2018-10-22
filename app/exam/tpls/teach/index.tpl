@@ -12,29 +12,20 @@
 				<li class="active">首页</li>
 			</ul>
 			<div class="row-fluid">
-				<div class="span6">
-					<div class="well">
-						<h5>
+				<div class="col-xs-12">
+						<h5 class="title">
 							开发者信息
 						</h5>
 						<p>
-							QQ:278768688 官方站：<a href="http://www.phpems.net">http://www.phpems.net</a> 本版版本号：{x2;c:PE_VERSION}
-						</p>
-					</div>
-				</div>
-				<div class="span6">
-					<div class="well">
-						<h5>
-							使用帮助
-						</h5>
-						<p>
-							帮助论坛：<a href="https://github.com/oiuv/phpems">https://github.com/oiuv/phpems</a>
+							开发者：{x2;c:AuthorName}
 						</p>
 						<p>
-							微信公众号：PHPEMS
+							 电&emsp;话：{x2;c:AuthorPhone}
+						</p>
+						<p>
+							 版本号：{x2;c:PE_VERSION}
 						</p>
 					</div>
-				</div>
 			</div>
 		</div>
 	</div>

@@ -136,7 +136,7 @@ class action extends app
 			$this->tpl->display('modifyuser');
 		}
 	}
-
+    //批量导入用户
 	private function batadd()
 	{
 		if($this->ev->post('insertUser'))
@@ -152,39 +152,55 @@ class action extends app
 			}
 			else
 			{
-				setlocale(LC_ALL,'zh_CN');
-				$handle = fopen($uploadfile,"r");
+			    //文件的扩展名
+			    $ext = strtolower(pathinfo($uploadfile,PATHINFO_EXTENSION));
+			    if($ext == 'xlsx'){
+			        $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xlsx');
+			    }elseif($ext == 'xls'){
+			        $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xls');
+			    }
+			    
+			    $reader->setReadDataOnly(TRUE);
+			    $spreadsheet = $reader->load($uploadfile); //载入excel表格
+			    $worksheet = $spreadsheet->getActiveSheet();
+			    $highestRow = $worksheet->getHighestRow(); // 总行数
+			    $highestColumn = $worksheet->getHighestColumn(); // 总列数
+			    $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn); // e.g. 5
 				$defaultgroup = $this->user->getDefaultGroup();
 				$strings = $this->G->make('strings');
-				while ($data = fgetcsv($handle,200))
+				for ($row = 2; $row <= $highestRow; ++$row)
 				{
-
-				    if($data[0] && $data[1])
+				    if(!empty($worksheet->getCellByColumnAndRow(1, $row)->getValue()))
 				    {
 					    $args = array();
-					    $args['username'] = iconv("GBK","UTF-8",$data[0]);
+					    //用户名
+					    $args['username'] = trim($worksheet->getCellByColumnAndRow(1, $row)->getValue()," \n\t");
+					    //验证用户名是否合法
 					    if($strings->isUserName($args['username']))
 					    {
 						    $u = $this->user->getUserByUserName($args['username']);
 						    if(!$u)
 						    {
-							    $args['useremail'] = $data[1];
-							    if($strings->isEmail($args['useremail']))
-							    {
-								    $u = $this->user->getUserByEmail($args['useremail']);
-								    if(!$u)
-								    {
-								    	if(!$data[2])$data[2] = '111111';
-								    	$args['userpassword'] = md5($data[2]);
-								    	$args['usergroupid'] = $defaultgroup['groupid'];
-								    	$this->user->insertUser($args);
-								    }
-							    }
+						        $args['usertruename'] = trim($worksheet->getCellByColumnAndRow(3, $row)->getValue()," \n\t");;
+						        if(empty(trim($worksheet->getCellByColumnAndRow(2, $row)->getValue()," \n\t")))
+						            $args['userpassword'] = md5("123456");
+						        else
+						            $args['userpassword'] = md5(trim($worksheet->getCellByColumnAndRow(2, $row)->getValue()," \n\t"));
+						        //性别
+						        $args['usergender'] = trim($worksheet->getCellByColumnAndRow(4, $row)->getValue()," \n\t");
+						        //学历
+						        $args['userdegree'] = trim($worksheet->getCellByColumnAndRow(5, $row)->getValue()," \n\t");
+						        //身份证
+						        $args['userpassport'] = trim($worksheet->getCellByColumnAndRow(6, $row)->getValue()," \n\t");
+						        $args['usergroupid'] = 8;
+						        $args['useremail'] = $args['username']."@qhyhgf.com";
+						       
+						        $this->user->insertUser($args);
 						    }
 					    }
 				    }
 				}
-				fclose($handle);
+				//exit(json_encode($args));
 				$message = array(
 					'statusCode' => 200,
 					"message" => "操作成功",

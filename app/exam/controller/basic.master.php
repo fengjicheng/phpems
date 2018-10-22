@@ -1,5 +1,7 @@
 <?php
-
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 /*
  * Created on 2016-5-19
  *
@@ -203,10 +205,11 @@ class action extends app
             $this->tpl->display('basic_knowsstats');
         }
     }
-
+    //导出成绩
     private function outscore()
     {
         $appid = 'user';
+        //获得模块设置->模块设置数据
         $app = $this->G->make('apps', 'core')->getApp($appid);
         $this->tpl->assign('app', $app);
         $fields = array();
@@ -217,12 +220,68 @@ class action extends app
                 $fields[$tf['fieldid']] = $tf;
             }
         }
-
         $search = $this->ev->get('search');
         $args = array();
+        //考场id
         $basicid = $this->ev->get('basicid');
+        // 获取basicid为1的考场
+        $basic = \Model\Basic::find($basicid);
+        //获取考场考试科目信息
+        $basicAttributes=$basic->subject->getAttributes();
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->getProperties()->setCreator(SystemName)
+        ->setLastModifiedBy(SystemName)
+        ->setTitle($basicAttributes["subject"])
+        ->setSubject(Contact)
+        ->setDescription(CustomerCompanyName)
+        ->setKeywords(AuthorName)
+        ->setCategory(AuthorPhone);
+        $worksheet = $spreadsheet->getActiveSheet();
+        //设置工作表标题名称
+        $worksheet->setTitle('成绩导出');
+        //设置单元格内容
+        
+        $worksheet->setCellValueByColumnAndRow(1, 1, $basicAttributes["subject"].'成绩表');
+        
+        $worksheet->setCellValueByColumnAndRow(1, 2, '名次');
+        $worksheet->getColumnDimension('A')->setWidth(12);
+        $worksheet->setCellValueByColumnAndRow(2, 2, '工号');
+        $worksheet->getColumnDimension('B')->setWidth(12);
+        $worksheet->setCellValueByColumnAndRow(3, 2, '姓名');
+        $worksheet->getColumnDimension('C')->setWidth(36);
+        $worksheet->setCellValueByColumnAndRow(4, 2, '手机号');
+        $worksheet->getColumnDimension('D')->setWidth(36);
+        //E 列为文本
+        $worksheet->getStyle('D')->getNumberFormat()
+        ->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER);
+        $worksheet->setCellValueByColumnAndRow(5, 2, '成绩');
+        $worksheet->getColumnDimension('E')->setWidth(12);
+        $worksheet->setCellValueByColumnAndRow(6, 2, '考试时间');
+        $worksheet->getStyle('E')->getNumberFormat()
+        ->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_YYYYMMDD2);
+        $worksheet->getColumnDimension('F')->setAutoSize(true);
+        $worksheet->setCellValueByColumnAndRow(7, 2, '考试用时');
+        $worksheet->getColumnDimension('G')->setWidth(24);
+        
+        //合并单元格
+        
+        $worksheet->mergeCells('A1:G1');
+        $styleArray = [
+            'font' => [
+                'bold' => true
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            ],
+            
+        ];
+        //设置表头和列名
+        $worksheet->getStyle('A1')->applyFromArray($styleArray)->getFont()->setSize(28);
+        $worksheet->getStyle('A2:G2')->applyFromArray($styleArray)->getFont()->setSize(14);
+        
         if ($basicid) {
-            $fname = 'data/score/'.TIME.'-'.$basicid.'-score.csv';
+            //生成的文件名称
+            $fname = 'data/score/'.TIME.'-'.$basicid.'-score.xlsx';
             $args[] = array('AND', "ehbasicid = :ehbasicid", 'ehbasicid', $basicid);
             $args[] = array('AND', "ehneedresit = 0");
             $args[] = array('AND', "ehtype = 2");
@@ -243,31 +302,55 @@ class action extends app
             if ($search['examid']) {
                 $args[] = array('AND', "ehexamid = :ehexamid", 'ehexamid', $search['examid']);
             }
-            $sf = array('ehusername', 'ehscore');
-            foreach ($fields as $p) {
-                $sf[] = $p['field'];
-            }
-            $rs = $this->favor->getAllExamHistoryByArgs($args, $sf);
-            $r = array();
-            foreach ($rs as $p) {
-                $tmp = array('ehusername' => iconv("UTF-8", "GBK", $p['ehusername']), 'ehscore' => $p['ehscore']);
-                foreach ($fields as $ps) {
-                    $tmp[$ps['field']] = iconv("UTF-8", "GBK", $p[$ps['field']]);
+            $rows = $this->favor->getAllExamHistoryByArgs($args, false);
+            //exit(json_encode($rows));
+            $len=count($rows);
+            $j = 0;
+            for ($i=0; $i < $len; $i++) {
+                $j = $i + 3; //从表格第3行开始
+                $worksheet->setCellValueByColumnAndRow(1, $j, $rows[$i]['ehid']);
+                $worksheet->setCellValueByColumnAndRow(2, $j, $rows[$i]['username']);
+                $worksheet->setCellValueByColumnAndRow(3, $j, $rows[$i]['usertruename']);
+                $worksheet->setCellValueByColumnAndRow(4, $j, $rows[$i]['userphone']);
+                $worksheet->setCellValueByColumnAndRow(5, $j, $rows[$i]['ehscore']."分");
+                $worksheet->setCellValueByColumnAndRow(6, $j, date("Y-m-d H:i",$rows[$i]['ehstarttime']));
+                //分钟
+                if($rows[$i]['ehtime']>60){
+                    $worksheet->setCellValueByColumnAndRow(7, $j, ($rows[$i]['ehtime']/60)."分".($rows[$i]['ehtime']%60)."秒");
                 }
-                $r[] = $tmp;
+                //秒
+                else{
+                    $worksheet->setCellValueByColumnAndRow(7, $j, $rows[$i]['ehtime']."秒");
+                }
             }
-            if ($this->files->outCsv($fname, $r))
-                $message = array(
-                    'statusCode' => 200,
-                    "message" => "成绩导出成功，转入下载页面，如果浏览器没有相应，请<a href=\"{$fname}\">点此下载</a>",
-                    "callbackType" => 'forward',
-                    "forwardUrl" => "{$fname}",
-                );
-            else
-                $message = array(
-                    'statusCode' => 300,
-                    "message" => "成绩导出失败",
-                );
+            $styleArrayBody = [
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => ['argb' => '666666'],
+                    ],
+                ],
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                ],
+                
+            ];
+            $total_rows = $len + 2;
+            //添加所有边框/居中
+            $worksheet->getStyle('A1:G'.$total_rows)->applyFromArray($styleArrayBody);
+            $worksheet->calculateColumnWidths();
+            $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer->save($fname);
+            //释放内存
+            $spreadsheet->disconnectWorksheets();
+            unset($spreadsheet);
+            //exit(json_encode($rs));
+            $message = array(
+                'statusCode' => 200,
+                "message" => "成绩导出成功，转入下载页面，如果浏览器没有相应，请<a href=\"{$fname}\">点此下载</a>",
+                "callbackType" => 'forward',
+                "forwardUrl" => "{$fname}",
+            );
         } else
             $message = array(
                 'statusCode' => 300,

@@ -26,7 +26,7 @@
 							<a data-toggle="dropdown" class="btn btn-primary" href="#">添加试题 <strong class="caret"></strong></a>
 							<ul class="dropdown-menu">
 								<li><a href="index.php?{x2;$_app}-teach-questions-addquestion&page={x2;$page}{x2;$u}">单题添加</a></li>
-								<li><a href="index.php?{x2;$_app}-teach-questions-filebataddquestion&page={x2;$page}{x2;$u}">CSV导入</a></li>
+								<li><a href="index.php?{x2;$_app}-teach-questions-filebataddquestion&page={x2;$page}{x2;$u}">EXCEL导入</a></li>
 							</ul>
 						</span>
 					</h4>

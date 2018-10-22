@@ -41,9 +41,10 @@ class strings
 		if(HE == 'utf-8')
 		{
 			//if(eregi('^[\u0391-\uFFE5|\w]{2,40}$',$str))
-			if(preg_match('/^[\x7f-\xff|\w]{2,40}$/i',$str))
-			return $str;
-			else return false;
+			if(preg_match('/^[A-Za-z0-9_\x{4e00}-\x{9fa5}]+$/u',$str))
+			    return $str;
+			else 
+			    return true;
 		}
 		else return true;
 	}

@@ -2,7 +2,7 @@
 	<div class="row-fluid">
 		<div class="main">
 			<div class="col-xs-3">
-				<h1 style="font-size:42px;color:#337AB7;"><img src="app/core/styles/img/logo2.png" style="height:60px;margin-top:-10px;"/>&nbsp;<b>PHPEMS</b></h1>
+				{x2;c:AppLogo}
 			</div>
 			<div class="col-xs-1">
 			</div>

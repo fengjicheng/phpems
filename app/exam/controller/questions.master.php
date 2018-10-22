@@ -38,7 +38,7 @@ class action extends app
 		);
 		$this->G->R($message);
 	}
-
+    //通过文件导入excel
 	private function filebataddquestion()
 	{
 		setlocale(LC_ALL,'zh_CN');
