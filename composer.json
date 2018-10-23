@@ -4,7 +4,7 @@
 		"predis/predis" : "^1.1",
 		"overtrue/wechat" : "~4.0",
 		"overtrue/easy-sms" : "^1.1",
-		"phpoffice/phpspreadsheet": "^1.5"
+		"phpoffice/phpspreadsheet" : "^1.5"
 	},
 	"autoload" : {
 		"psr-4" : {

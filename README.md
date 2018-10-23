@@ -12,6 +12,7 @@
 | [overtrue/easy-sms](https://packagist.org/packages/overtrue/easy-sms) | 一款满足你的多种发送需求的短信发送组件 |
 | [overtrue/wechat](https://packagist.org/packages/overtrue/wechat) | 开源的微信非官方 SDK，方便在考试系统开发微信服务号相关功能 |
 | [predis/predis](https://packagist.org/packages/predis/predis) | 缓存驱动 Redis 基础扩展包，使系统支持Redis缓存 |
+| [phpoffice/phpspreadsheet](https://packagist.org/packages/phpoffice/phpspreadsheet) | EXCEL 导入导出 |
 
 ## 优化&新增功能
 
