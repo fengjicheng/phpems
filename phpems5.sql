@@ -1536,3 +1536,11 @@ CREATE TABLE `x2_user_group` (
 /*!40000 ALTER TABLE `x2_user_group` DISABLE KEYS */;
 INSERT INTO `x2_user_group` VALUES (1,'管理员',1,'管理员','',1,0),(8,'普通用户',9,'普通用户','',0,1),(9,'教师',12,'教师','',0,0);
 /*!40000 ALTER TABLE `x2_user_group` ENABLE KEYS */;
+DROP TABLE IF EXISTS `x2_dept`;
+CREATE TABLE `x2_dept` (
+  `deptid` int(11) NOT NULL AUTO_INCREMENT,
+  `deptname` varchar(60) NOT NULL DEFAULT '',
+  `deptparentid` int(11) NOT NULL,
+  `deptsort` int(8) NOT NULL DEFAULT '0'
+  PRIMARY KEY (`deptid`)
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;

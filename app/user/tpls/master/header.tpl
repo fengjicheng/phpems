@@ -22,4 +22,6 @@
 
 	<script src="app/core/styles/js/ckeditor/ckeditor.js"></script>
 	<script src="app/core/styles/js/plugin.js"></script>
+	<link rel="stylesheet" href="app/user/styles/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+	<script type="text/javascript" src="app/user/styles/zTree/js/jquery.ztree.core.js"></script>
 </head>

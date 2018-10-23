@@ -20,7 +20,11 @@
 					</div>
 					<input type="hidden" value="1" name="userlogin"/>
 					<button type="submit" class="btn btn-primary btn-block" style="height:44px;line-height:32px;font-size:16px;margin-top:30px;">登录</button>
+					{x2;if:$app['appsetting']['closeregist']}
+					{x2;else}
 					<a class="btn btn-default btn-block" href="index.php?user-app-register" style="height:44px;line-height:32px;font-size:16px;margin-top:10px;">注册</a>
+					{x2;endif}
+					
                     {x2;if:$app['appsetting']['emailverify']}
 					<a class="btn btn-danger btn-block" href="index.php?user-app-register-findpassword" style="height:44px;line-height:32px;font-size:16px;margin-top:10px;">忘记密码</a>
                     {x2;endif}

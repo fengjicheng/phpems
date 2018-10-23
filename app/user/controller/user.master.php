@@ -281,7 +281,8 @@ class action extends app
 		$args = array();
 		if($search['userid'])$args[] = array('AND',"userid = :userid",'userid',$search['userid']);
 		if($search['username'])$args[] = array('AND',"username LIKE :username",'username','%'.$search['username'].'%');
-		if($search['useremail'])$args[] = array('AND',"useremail  LIKE :useremail",'useremail','%'.$search['useremail'].'%');
+		if($search['userpassport'])$args[] = array('AND',"userpassport  LIKE :userpassport",'userpassport','%'.$search['userpassport'].'%');
+		if($search['usertruename'])$args[] = array('AND',"usertruename  LIKE :usertruename",'usertruename','%'.$search['usertruename'].'%');
 		if($search['groupid'])$args[] = array('AND',"usergroupid = :usergroupid",'usergroupid',$search['groupid']);
 		if($search['stime'] || $search['etime'])
 		{

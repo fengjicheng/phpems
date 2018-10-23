@@ -23,6 +23,9 @@ class action extends app
 
 	private function index()
 	{
+	    $appid = 'user';
+	    $app = $this->G->make('apps','core')->getApp($appid);
+	    $this->tpl->assign('app',$app);
 		$catids = array();
 		$catids['index'] = $this->category->getCategoriesByArgs(array(array("AND","catindex > 0")));
 		$contents = array();

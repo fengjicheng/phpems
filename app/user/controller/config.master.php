@@ -11,7 +11,7 @@ class action extends app
 	{
 		$action = $this->ev->url(3);
 		if(!method_exists($this,$action))
-		$action = "index";
+		    $action = "index";
 		$this->$action();
 		exit;
 	}

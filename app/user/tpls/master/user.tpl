@@ -53,10 +53,16 @@
 							</tr>
 					        <tr>
 								<td>
-									电子邮箱：
+									姓名：
 								</td>
 					        	<td>
-					        		<input class="form-control" name="search[useremail]" size="15" type="text" value="{x2;$search['useremail']}"/>
+					        		<input class="form-control" name="search[usertruename]" size="15" type="text" value="{x2;$search['usertruename']}"/>
+					        	</td>
+					        	<td>
+									身份证：
+								</td>
+					        	<td>
+					        		<input class="form-control" name="search[userpassport]" size="15" type="text" value="{x2;$search['userpassport']}"/>
 					        	</td>
 					        	<td>
 									用户组：
@@ -72,7 +78,6 @@
 								<td>
 									<button class="btn btn-primary" type="submit">提交</button>
 								</td>
-								<td></td>
 					        </tr>
 						</table>
 						<div class="input">
@@ -86,11 +91,11 @@
 									<th><input type="checkbox" class="checkall" target="delids"/></th>
 									<th>ID</th>
 									<th>用户名</th>
-									<th>电子邮件</th>
-									<th>注册IP</th>
+									<th>姓名</th>
+									<th>手机号</th>
+									<th>身份证号</th>
 									<th>积分点数</th>
 									<th>角色</th>
-									<th>注册时间</th>
 									<th>操作</th>
 								</tr>
 							</thead>
@@ -100,9 +105,11 @@
 									<td>{x2;if:v:user['userid'] != $_user['userid']}<input type="checkbox" name="delids[{x2;v:user['userid']}]" value="1">{x2;endif}</td>
 									<td>{x2;v:user['userid']}</td>
 									<td>{x2;v:user['username']}</td>
-									<td>{x2;v:user['useremail']}</td><td>{x2;v:user['userregip']}</td>
-									<td>{x2;v:user['usercoin']}</td><td>{x2;$groups[v:user['usergroupid']]['groupname']}</td>
-									<td>{x2;date:v:user['userregtime'],'Y-m-d'}</td>
+									<td>{x2;v:user['usertruename']}</td>
+									<td>{x2;v:user['userphone']}</td>
+									<td>{x2;v:user['userpassport']}</td>
+									<td>{x2;v:user['usercoin']}</td>
+									<td>{x2;$groups[v:user['usergroupid']]['groupname']}</td>
 									<td>
 										<div class="btn-group">
 											<a class="btn" href="index.php?user-master-user-modify&userid={x2;v:user['userid']}&page={x2;$page}{x2;$u}"><em class="glyphicon glyphicon-edit"></em></a>

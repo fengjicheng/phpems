@@ -46,7 +46,11 @@
 					<!--
 					<li><a href="javascript:;" onclick="javascript:$.loginbox.show();" class="btn btn-default"> 登 录 </a></li>
 					-->
+					
+					{x2;if:$app['appsetting']['closeregist']}
+					{x2;else}
 					<li><a href="index.php?user-app-register" class="btn btn-default"> 注 册 </a></li>
+					{x2;endif}
 					{x2;endif}
 				</ul>
 			</div>

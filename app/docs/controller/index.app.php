@@ -23,6 +23,9 @@ class action extends app
 
 	private function index()
 	{
+	    $appid = 'user';
+	    $app = $this->G->make('apps','core')->getApp($appid);
+	    $this->tpl->assign('app',$app);
         $number = array();
         $number['more'] = $this->doc->getDocNumber(array(array("AND","docneedmore = 1")));
         $number['all'] = $this->doc->getDocNumber(array());
