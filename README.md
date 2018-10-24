@@ -21,7 +21,7 @@
 - 可在线[数据库迁移](https://laravel-china.org/docs/laravel/5.6/migrations/1400)，请参考 `examples` 目录下 `Database.php`
 - 新增部分字符串和数组[辅助函数](https://laravel-china.org/docs/laravel/5.6/helpers/1391)，如：dd()
 - 新增 Redis 缓存支持，请参考 `examples` 目录中的 `Cache.php`
-
+- 新增 部门管理
 使用 ORM 操作数据库示例：
 ````php
 // 获取userid为1的用户
@@ -83,11 +83,11 @@ $client->set('phpems:knows', json_encode(Cache::knows()));
 
 ## 安装
 
-    git clone git@github.com:oiuv/phpems.git
+    git clone https://github.com/fengjicheng/phpems.git
     cd phpems
     composer install
     
-安装完成后，重命名 lib 目录下 `config.inc.example.php` 为 `config.inc.php` 并修改配置，然后导入数据库 `phpems5.sql` 即可。
+安装完成后，重命名 lib 目录下 `config.inc.example.php` 为 `config.inc.php` 并修改配置，然后导入数据库 `phpems.sql` 即可。
 
 ## 使用
 
