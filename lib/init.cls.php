@@ -1,8 +1,12 @@
 <?php
 
-ini_set("display_errors", "on");
-error_reporting(E_ALL ^ E_NOTICE);
-//error_reporting(0);
+if (DEBUG) {
+    ini_set("display_errors", 1);
+    error_reporting(E_ALL ^ E_NOTICE);
+} else {
+    ini_set("display_errors", 0);
+    error_reporting(0);
+}
 
 class ginkgo
 {
@@ -80,6 +84,17 @@ class ginkgo
              * }
              * }
              **/
+             // 以下代码为微信自动登录
+             $this->user = $this->make('user', 'user');
+             $this->session = $this->make('session');
+             $_user = $this->session->getSessionUser();
+             if (!$_user['sessionuserid']) {
+                 $r = $this->user->autoLoginWxUser($_SESSION['openid']);
+                 if ($r) {
+                     header("location:index.php?".$this->defaultApp.'-'.$this->module.'&userhash='.$ev->get('userhash'));
+                     exit;
+                 }
+             }
         }
         if (!$app) {
             $this->app = $app = $this->defaultApp;

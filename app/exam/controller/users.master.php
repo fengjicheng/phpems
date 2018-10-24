@@ -105,6 +105,7 @@ class action extends app
 			$userids = $this->ev->get('userids');
 			$usernames = $this->ev->get('usernames');
 			$usergroupids = $this->ev->get('usergroupids');
+			$deptids = $this->ev->get('deptids');
 			$basics = $this->ev->get('basics');
 			$days = $this->ev->get('days');
 			if($userids && $basics && $days)
@@ -157,6 +158,24 @@ class action extends app
 					"message" => "操作成功"
 				);
 			}
+			//根据部门开通
+			elseif($deptids && $basics && $days)
+			{
+			    $deptids = implode(",",array_unique(explode(",",$deptids)));
+			    $basics = explode(",",$basics);
+			    $userids = $this->user->getUsersByArgs(array(array("AND","find_in_set(deptid,:deptid)",'deptid',$deptids)),false,false,false);
+			    foreach($userids as $user)
+			    {
+			        foreach($basics as $basicid)
+			        {
+			            $this->basic->openBasic(array('obuserid'=>$user['userid'],'obbasicid'=>$basicid,'obendtime' => TIME + $days*24*3600));
+			        }
+			    }
+			    $message = array(
+			        'statusCode' => 200,
+			        "message" => "操作成功"
+			    );
+			}
 			else
 			{
 				$message = array(
@@ -168,6 +187,22 @@ class action extends app
 		}
 		else
 		{
+		    $deptarray =\Model\Dept::where([])->orderBy('deptsort','desc')->get(['deptid as id', 'deptparentid as pId', 'deptname as name'])->toArray();
+		    $list = array();
+		    foreach ($deptarray as $k=>$v) {
+		        // 设置三级目录的显示
+		        if($v['pId'] == 0){
+		            $list[$k]['isParent'] = true; //是否是父级
+		            $list[$k]['open'] = true;//文件夹节点全部展开
+		        }
+		        $list[$k]['id'] = $v['id'];
+		        $list[$k]['pId'] = $v['pId'];//父级id
+		        $list[$k]['name'] = $v['name'];//文件名称
+		        
+		        
+		    }
+		    $deptjson=json_encode($list);
+		    $this->tpl->assign('deptjson',$deptjson);
 			$basicid = $this->ev->get('basicid');
 			$this->tpl->assign('basicid',$basicid);
 			$this->tpl->display('user_batopen');

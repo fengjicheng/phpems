@@ -1,5 +1,85 @@
 {x2;include:header}
+<style>
+   	    div.content_wrap {width: 600px;height:380px;}
+		div.content_wrap div.left{float: left;width: 250px;}
+		div.content_wrap div.right{float: right;width: 340px;}
+		div.zTreeDemoBackground {width:250px;height:362px;text-align:left;}
+		
+		ul.ztree {margin-top: 10px;border: 1px solid #617775;background: #f0f6e4;width:220px;height:360px;overflow-y:scroll;overflow-x:auto;}
+		ul.log {border: 1px solid #617775;background: #f0f6e4;width:300px;height:170px;overflow: hidden;}
+		ul.log.small {height:45px;}
+		ul.log li {color: #666666;list-style: none;padding-left: 10px;}
+		ul.log li.dark {background-color: #E3E3E3;}
+		
+		/* ruler */
+		div.ruler {height:20px; width:220px; background-color:#f0f6e4;border: 1px solid #333; margin-bottom: 5px; cursor: pointer}
+		div.ruler div.cursor {height:20px; width:30px; background-color:#3C6E31; color:white; text-align: right; padding-right: 5px; cursor: pointer}
+    
+    </style>
+	<link rel="stylesheet" href="app/user/styles/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+	<script type="text/javascript" src="app/user/styles/zTree/js/jquery.ztree.core.js"></script>
+	<script type="text/javascript">
+		var setting = {
+			view: {
+				dblClickExpand: false
+			},
+			data: {
+				simpleData: {
+					enable: true
+				}
+			},
+			callback: {
+				onClick: onClick
+			}
+		};
+
+		var zNodes =JSON.parse('{x2;$deptjson}');
+		
+		function onClick(e, treeId, treeNode) {
+			var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+			nodes = zTree.getSelectedNodes(),
+			v = "";
+			nodes.sort(function compare(a,b){return a.id-b.id;});
+			for (var i=0, l=nodes.length; i<l; i++) {
+				v += nodes[i].name + ",";
+			}
+			if (v.length > 0 ) v = v.substring(0, v.length-1);
+			var cityObj = $("#citySel");
+			cityObj.attr("value", v);
+			u = "";
+			for (var i=0, l=nodes.length; i<l; i++) {
+				u += nodes[i].id + ",";
+			}
+			if (u.length > 0 ) u = u.substring(0, u.length-1);
+			var deptid = $("#deptid");
+			deptid.attr("value", u);
+		}
+
+		function showMenu() {
+			var cityObj = $("#citySel");
+			var cityOffset = $("#citySel").offset();
+			$("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top - $("#menuContent").outerHeight() + "px"}).slideDown("fast");
+
+			$("body").bind("mousedown", onBodyDown);
+		}
+		function hideMenu() {
+			$("#menuContent").fadeOut("fast");
+			$("body").unbind("mousedown", onBodyDown);
+		}
+		function onBodyDown(event) {
+			if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+				hideMenu();
+			}
+		}
+
+		$(document).ready(function(){
+			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+		});
+	</script>
 <body>
+<div id="menuContent" class="menuContent" style="display:none;z-index:99999; position: absolute;">
+	<ul id="treeDemo" class="ztree" style="margin-top:0; width:160px;"></ul>
+</div>
 {x2;include:nav}
 <div class="container-fluid">
 	<div class="row-fluid">

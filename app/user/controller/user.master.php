@@ -123,6 +123,22 @@ class action extends app
 		}
 		else
 		{
+		    $deptarray =\Model\Dept::where([])->orderBy('deptsort','desc')->get(['deptid as id', 'deptparentid as pId', 'deptname as name'])->toArray();
+		    $list = array();
+		    foreach ($deptarray as $k=>$v) {
+		        // 设置三级目录的显示
+		        if($v['pId'] == 0){
+		            $list[$k]['isParent'] = true; //是否是父级
+		            $list[$k]['open'] = true;//文件夹节点全部展开
+		        }
+		        $list[$k]['id'] = $v['id'];
+		        $list[$k]['pId'] = $v['pId'];//父级id
+		        $list[$k]['name'] = $v['name'];//文件名称
+		        
+		        
+		    }
+		    $deptjson=json_encode($list);
+		    $this->tpl->assign('deptjson',$deptjson);
 			$userid = $this->ev->get('userid');
 			$user = $this->user->getUserById($userid);
 			$group = $this->user->getGroupById($user['usergroupid']);
@@ -192,6 +208,10 @@ class action extends app
 						        $args['userdegree'] = trim($worksheet->getCellByColumnAndRow(5, $row)->getValue()," \n\t");
 						        //身份证
 						        $args['userpassport'] = trim($worksheet->getCellByColumnAndRow(6, $row)->getValue()," \n\t");
+						        //部门ID
+						        $args['deptid'] = trim($worksheet->getCellByColumnAndRow(7, $row)->getValue()," \n\t");
+						        //手机号
+						        $args['userphone'] = trim($worksheet->getCellByColumnAndRow(8, $row)->getValue()," \n\t");
 						        $args['usergroupid'] = 8;
 						        $args['useremail'] = $args['username']."@qhyhgf.com";
 						       
@@ -226,9 +246,9 @@ class action extends app
 				$userbyname = $this->user->getUserByUserName($args['username']);
 				$userbyemail = $this->user->getUserByEmail($args['useremail']);
 				if($userbyname)
-				$errmsg = "这个用户名已经被注册了";
+				    $errmsg = "这个用户名已经被注册了";
 				if($userbyemail)
-				$errmsg = "这个邮箱已经被注册了";
+				    $errmsg = "这个邮箱已经被注册了";
 				if($errmsg)
 				{
 					$message = array(
@@ -262,6 +282,22 @@ class action extends app
 		}
 		else
 		{
+		    $deptarray =\Model\Dept::where([])->orderBy('deptsort','desc')->get(['deptid as id', 'deptparentid as pId', 'deptname as name'])->toArray();
+		    $list = array();
+		    foreach ($deptarray as $k=>$v) {
+		        // 设置三级目录的显示
+		        if($v['pId'] == 0){
+		            $list[$k]['isParent'] = true; //是否是父级
+		            $list[$k]['open'] = true;//文件夹节点全部展开
+		        }
+		        $list[$k]['id'] = $v['id'];
+		        $list[$k]['pId'] = $v['pId'];//父级id
+		        $list[$k]['name'] = $v['name'];//文件名称
+		        
+		        
+		    }
+		    $deptjson=json_encode($list);
+		    $this->tpl->assign('deptjson',$deptjson);
 			$this->tpl->display('adduser');
 		}
 	}

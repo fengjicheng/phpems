@@ -4,8 +4,8 @@
 <div class="container-fluid">
 	<div class="row-fluid">
 		<div class="main box itembox">
-			<h4 class="title" style="padding:10px;">我的考场<a href="index.php?exam-app-basics-open" class="btn btn-primary pull-right"><em class="glyphicon glyphicon-plus-sign"></em> 开通新考场</a></h4>
-			<div class="col-xs-12" style="padding-left:0px;">
+			<h4 class="title" style="padding:10px;">我的考场 <!--<a href="index.php?exam-app-basics-open" class="btn btn-primary pull-right"><em class="glyphicon glyphicon-plus-sign"></em> 开通新考场</a></h4>-->
+			<div class="col-xs-12" style="padding-left:0px;padding-top:40px;">
                 {x2;if:is_array($basics)}
 				{x2;tree:$basics,basic,bid}
 				<div class="col-xs-3" style="width:20%">

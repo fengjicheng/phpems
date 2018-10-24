@@ -53,23 +53,25 @@
 						<thead>
 							<tr class="info">
 			                    <th>ID</th>
-						        <th>用户名</th>
-						        <th>电子邮件</th>
-						        <th>注册IP</th>
-						        <th>积分点数</th>
-						        <th>角色</th>
-						        <th>注册时间</th>
-						        <th>操作</th>
+								<th>用户名</th>
+								<th>姓名</th>
+								<th>手机号</th>
+								<th>身份证号</th>
+								<th>积分点数</th>
+								<th>角色</th>
+								<th>操作</th>
 			                </tr>
 			            </thead>
 			            <tbody>
 			            	{x2;tree:$users['data'],user,uid}
 			            	<tr>
 			                    <td>{x2;v:user['userid']}</td>
-			                    <td>{x2;v:user['username']}</td>
-								<td>{x2;v:user['useremail']}</td><td>{x2;v:user['userregip']}</td>
-								<td>{x2;v:user['usercoin']}</td><td>{x2;$groups[v:user['usergroupid']]['groupname']}</td>
-								<td>{x2;date:v:user['userregtime'],'Y-m-d H:i:s'}</td>
+								<td>{x2;v:user['username']}</td>
+								<td>{x2;v:user['usertruename']}</td>
+								<td>{x2;v:user['userphone']}</td>
+								<td>{x2;v:user['userpassport']}</td>
+								<td>{x2;v:user['usercoin']}</td>
+								<td>{x2;$groups[v:user['usergroupid']]['groupname']}</td>
 								<td>
 								  	<div class="btn-group">
 			                    		<a class="btn" href="index.php?exam-master-users-basics&userid={x2;v:user['userid']}{x2;$u}" title="开通课程"><em class="glyphicon glyphicon-th-list"></em></a>
