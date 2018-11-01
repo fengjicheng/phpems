@@ -14,7 +14,7 @@
 		<div class="container-fluid">
 			<div style="width:90%;margin:auto;margin-bottom:1rem;overflow:hidden;">
 				<h2 class="text-center">
-					<img src="app/core/styles/img/logo2.png" style="width:6rem;">
+					{x2;c:PhoneLogo}
 				</h2>
 				<h4 class="text-center" style="padding:1rem;">用户登录</h4>
 				<form class="col-xs-12" method="post" action="index.php?user-phone-login">
@@ -28,7 +28,11 @@
 					</div>
 					<input type="hidden" value="1" name="userlogin"/>
 					<button type="submit" class="btn btn-primary btn-block" style="line-height:3rem;">登录</button>
+					{x2;if:$app['appsetting']['closeregist']}
+					{x2;else}
 					<a class="btn btn-default btn-block ajax" href="index.php?user-phone-register" data-target="userregister" data-page="userregister" style="line-height:3rem;">注册</a>
+					{x2;endif}
+					
 				</form>
 			</div>
 		</div>

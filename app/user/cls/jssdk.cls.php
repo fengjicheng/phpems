@@ -42,11 +42,7 @@ class jssdk_user {
     }
     return $str;
   }
-
-  private function getJsApiTicket() {
-    // jsapi_ticket 应该全局存储与更新，以下代码以写入到文件中做示例
-    $data = json_decode(file_get_contents("data/jsapi_ticket.json"));
-    if ($data->expire_time < time()) {
+  private  function getTicket(){
       $accessToken = $this->getAccessToken();
       // 如果是企业号用以下 URL 获取 ticket
       // $url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=$accessToken";
@@ -54,39 +50,93 @@ class jssdk_user {
       $res = json_decode($this->httpGet($url));
       $ticket = $res->ticket;
       if ($ticket) {
-        $data->expire_time = time() + 7000;
-        $data->jsapi_ticket = $ticket;
-        $fp = fopen("data/jsapi_ticket.json", "w");
-        fwrite($fp, json_encode($data));
-        fclose($fp);
+          $data->expire_time = time() + 7000;
+          $data->jsapi_ticket = $ticket;
+      }else{
+          $data->expire_time = time();
+          $data->jsapi_ticket = "";
       }
-    } else {
-      $ticket = $data->jsapi_ticket;
-    }
-
-    return $ticket;
+      return  $data;
   }
-
-  private function getAccessToken() {
-    // access_token 应该全局存储与更新，以下代码以写入到文件中做示例
-    $data = json_decode(file_get_contents("data/access_token.json"));
-    if ($data->expire_time < time()) {
+  private function getJsApiTicket() {
+    //如果使用redis存储
+    if (REDIS){
+        $client = new Predis\Client(REDISSERVER);
+        //如果存在
+        if ($client->exists('phpems:ticket')) {
+            $data = $client->get('phpems:ticket');
+            $data = json_decode($data);
+            if ($data->expire_time < time()){
+                $data=$this->getTicket();
+                $client->set('phpems:ticket',json_encode($data));
+            }
+        }
+        else{
+            $data=$this->getTicket();
+            $client->set('phpems:ticket',json_encode($data));
+        }
+    }
+    else{
+        //判断文件是否存在
+        if (file_exists("data/jsapi_ticket.json")) {
+            $data = json_decode(file_get_contents("data/jsapi_ticket.json"));;
+            if ($data->expire_time < time()){
+                $data=$this->getTicket();
+                $fp = fopen("data/jsapi_ticket.json", "w");
+                fwrite($fp, json_encode($data));
+                fclose($fp);
+            }
+        }
+        else{
+            $data=$this->getTicket();
+            $fp = fopen("data/jsapi_ticket.json", "w");
+            fwrite($fp, json_encode($data));
+            fclose($fp);
+        }
+        // jsapi_ticket 应该全局存储与更新，以下代码以写入到文件中做示例
+        
+    }
+    return $data->jsapi_ticket;
+  }
+  private function _getAccessToken(){
       // 如果是企业号用以下URL获取access_token
       // $url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=$this->appId&corpsecret=$this->appSecret";
       $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$this->appId&secret=$this->appSecret";
       $res = json_decode($this->httpGet($url));
-      $access_token = $res->access_token;
-      if ($access_token) {
-        $data->expire_time = time() + 7000;
-        $data->access_token = $access_token;
-        $fp = fopen("data/access_token.json", "w");
-        fwrite($fp, json_encode($data));
-        fclose($fp);
-      }
-    } else {
-      $access_token = $data->access_token;
-    }
-    return $access_token;
+      return $res;
+  }
+  private function getAccessToken() {
+    if (REDIS) {
+        $client = new Predis\Client(REDISSERVER);
+        //如果存在
+        if ($client->exists('phpems:getAccessToken')) {
+            $data = $client->get('phpems:getAccessToken');
+            $data = json_decode($data);
+            if ($data->expire_time < time()){
+                $data=$this->_getAccessToken();
+                $client->set('phpems:getAccessToken',json_encode($data));
+            }
+        }
+        else{
+            $data=$this->_getAccessToken();
+            $client->set('phpems:getAccessToken',json_encode($data));
+        }
+    }else{
+        // access_token 应该全局存储与更新，以下代码以写入到文件中做示例
+        $data = json_decode(file_get_contents("data/access_token.json"));
+        if ($data->expire_time < time()) {
+            $data =$this->_getAccessToken();
+            $access_token=$data->access_token;
+            if ($access_token) {
+                $data->expire_time = time() + 7000;
+                $data->access_token = $access_token;
+                $fp = fopen("data/access_token.json", "w");
+                fwrite($fp, json_encode($data));
+                fclose($fp);
+            }
+        } 
+    }   
+    return $data->access_token;
   }
 
   private function httpGet($url) {

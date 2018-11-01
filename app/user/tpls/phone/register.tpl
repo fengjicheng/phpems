@@ -7,7 +7,7 @@
 		</header>
     	<div style="width:90%;margin:auto;margin-bottom:1rem;">
 	    	<h2 class="text-center">
-				<img src="app/core/styles/img/logo2.png" style="width:6rem;">
+				{x2;c:PhoneLogo}
 			</h2>
 			<h4 class="text-center" style="padding:1rem;">用户注册</h4>
 			<form class="col-xs-12" method="post" action="index.php?user-phone-register">

@@ -7,7 +7,7 @@
 		</header>
 		<div class="container-fluid">
 			<h2 class="text-center">
-				<img src="app/core/styles/img/logo2.png" style="width:6rem;">
+				{x2;c:PhoneLogo}
 			</h2>
 			<h4 class="text-center">{x2;$_user['username']} 积分:{x2;$_user['usercoin']}</h4>
 		</div>

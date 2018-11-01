@@ -22,15 +22,15 @@ define('DP','168168');//MYSQL鏁版嵁搴撶敤鎴峰瘑鐮�
 define('DTH','x2_');//绯荤粺琛ㄥ墠缂�锛屼笉鐢ㄦ敼
 
 define('REDIS',true);
-define('SERVER', [
+define('REDISSERVER', [
     'host' => '127.0.0.1', //Redis地址IP
     'port' => 6379, //Redis端口号
     'database' => 9, //Redis数据库索引
 ]);
 //公众号设置
 define('USEWX',false);
-define('WXAPPID','***');
-define('WXAPPSECRET','***');
+define('WXAPPID','wx362f9622acb2216e');
+define('WXAPPSECRET','e34b10346849db507e733b7a7e3cf191');
 define('WXMCHID','***');
 define('WXKEY','***');
 //支付宝设置
@@ -52,7 +52,9 @@ define('SoftName','盐湖股份'); //软件名称
 define('AuthorName','盐湖股份信息中心开发组'); //开发者名称
 define('AuthorPhone','0979-8448118'); //开发者电话
 define('Copyright','<a href="">Copyright © qhyhgf.com  2018-2023</a>'); //版权
+define('PhoneCopyright','盐湖股份在线模拟系统<br />Copyright ©qhyhgf.com  2018-2023'); //版权
 define('MasterLogo','<h1 style="color:#337AB7;"><img src="app/core/styles/img/logo3.png" style="height:60px;margin-top:-10px;"/>&nbsp;盐湖股份管理平台</h1>'); //后台管理logo
+define('PhoneLogo','<img src="app/core/styles/img/logo3.png" style="width:6rem;">');
 define('AppLogo','<h1 style="font-size:42px;color:#337AB7;"><img src="app/core/styles/img/logo3.png" style="height:60px;margin-top:-10px;">&nbsp;<b>盐湖股份</b></h1>'); //前台logo
 
 

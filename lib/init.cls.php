@@ -1,5 +1,5 @@
 <?php
-
+//DEBUG设置
 if (DEBUG) {
     ini_set("display_errors", 1);
     error_reporting(E_ALL ^ E_NOTICE);
@@ -58,6 +58,7 @@ class ginkgo
         include __DIR__.'/config.inc.php';
         header('P3P: CP=CAO PSA OUR');
         header('Content-Type: text/html; charset='.HE);
+        //时区设置
         ini_set('date.timezone', 'Asia/Shanghai');
         date_default_timezone_set("Etc/GMT-8");
         $ev = $this->make('ev');
@@ -65,6 +66,7 @@ class ginkgo
         $this->app = $app;
         $this->module = $module = $ev->url(1);
         $this->method = $method = $ev->url(2);
+        //判断微信登录
         if (USEWX && $ev->isWeixin()) {
             if (!$_SESSION['openid']) {
                 $wxpay = $this->make('wxpay');

@@ -9,7 +9,7 @@
             <header class="container-fluid" style="background-color:#337AB7;">
                 <h5 class="text-center">
                     <em style="font-size:2rem;" class="pull-left glyphicon glyphicon-home"></em>
-                    <span class="ttlo">PHPEMS模拟考试系统</span>
+                    <span class="ttlo">{x2;c:SystemName}</span>
                     <a style="font-size:2rem;color:#FFFFFF;" href="index.php?user-phone"
                        class="pull-right glyphicon glyphicon-user ajax" data-target="user" data-page="user"></a>
                 </h5>
@@ -195,6 +195,8 @@
                 {x2;endif}
                 {x2;endtree}
             </div>
+            
+       		{x2;include:footer}
         </div>
         <script>
             $(function () {
@@ -207,7 +209,6 @@
                 });
             });
         </script>
-        {x2;include:footer}
         {x2;if:!$userhash}
     </div>
 </div>

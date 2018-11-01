@@ -308,7 +308,7 @@ class action extends app
             $j = 0;
             for ($i=0; $i < $len; $i++) {
                 $j = $i + 3; //从表格第3行开始
-                $worksheet->setCellValueByColumnAndRow(1, $j, $rows[$i]['ehid']);
+                $worksheet->setCellValueByColumnAndRow(1, $j, $i+1);
                 $worksheet->setCellValueByColumnAndRow(2, $j, $rows[$i]['username']);
                 $worksheet->setCellValueByColumnAndRow(3, $j, $rows[$i]['usertruename']);
                 $worksheet->setCellValueByColumnAndRow(4, $j, $rows[$i]['userphone']);
@@ -316,7 +316,7 @@ class action extends app
                 $worksheet->setCellValueByColumnAndRow(6, $j, date("Y-m-d H:i",$rows[$i]['ehstarttime']));
                 //分钟
                 if($rows[$i]['ehtime']>60){
-                    $worksheet->setCellValueByColumnAndRow(7, $j, ($rows[$i]['ehtime']/60)."分".($rows[$i]['ehtime']%60)."秒");
+                    $worksheet->setCellValueByColumnAndRow(7, $j, (intval($rows[$i]['ehtime']/60))."分".($rows[$i]['ehtime']%60)."秒");
                 }
                 //秒
                 else{
