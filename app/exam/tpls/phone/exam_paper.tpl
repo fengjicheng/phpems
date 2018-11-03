@@ -33,7 +33,7 @@
                                     、{x2;$questype[v:quest]['questype']}</h4></dt>
                             <dd class="tableindex">
                                 {x2;eval: v:tid = 0}
-                                {x2;tree:$sessionvars['examsessionquestion']['questions'][v:quest],question,qnid}
+                                {x2;tree:(array)$sessionvars['examsessionquestion']['questions'][v:quest],question,qnid}
                                 {x2;eval: v:tid++}
                                 {x2;eval: v:qmid++}
                                 <a style="margin-bottom:0.5rem;" id="sign_{x2;v:question['questionid']}"
@@ -41,7 +41,7 @@
                                    onclick="javascript:$.leftMenu($('#questionbar'));gotoquestion('{x2;v:question['questionid']}');$('#form1').toggle();"
                                    class="btn btn-default{x2;if:$sessionvars['examsessionsign'][v:question['questionid']]} btn-danger{x2;endif}">{x2;v:tid}</a>
                                 {x2;endtree}
-                                {x2;tree:$sessionvars['examsessionquestion']['questionrows'][v:quest],questionrow,qrid}
+                                {x2;tree:(array)$sessionvars['examsessionquestion']['questionrows'][v:quest],questionrow,qrid}
                                 {x2;eval: v:tid++}
                                 {x2;tree:v:questionrow['data'],data,did}
                                 {x2;eval: v:qmid++}

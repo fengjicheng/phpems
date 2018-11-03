@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>PHPEMS模拟考试系统</title>
+    <title>{x2;c:SystemName}阅卷</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<link rel="stylesheet" type="text/css" href="app/core/styles/css/bootstrap.css" />
@@ -57,7 +57,7 @@
 			                {x2;eval: v:tid++}
 							<a id="sign_{x2;v:question['questionid']}" href="#question_{x2;v:question['questionid']}" class="btn btn-default">{x2;v:tid}</a>
 							{x2;endtree}
-							{x2;tree:$sessionvars['examsessionquestion']['questionrows'][v:quest],questionrow,qrid}
+							{x2;tree:(array)$sessionvars['examsessionquestion']['questionrows'][v:quest],questionrow,qrid}
 			                {x2;eval: v:tid++}
 			                {x2;tree:v:questionrow['data'],data,did}
 			                <a id="sign_{x2;v:data['questionid']}" href="#question_{x2;v:data['questionid']}" class="btn btn-default">{x2;v:tid}-{x2;v:did}</a>
@@ -125,7 +125,7 @@
 	                </div>
 				</div>
 				{x2;endtree}
-				{x2;tree:$sessionvars['examsessionquestion']['questionrows'][v:quest],questionrow,qrid}
+				{x2;tree:(array)$sessionvars['examsessionquestion']['questionrows'][v:quest],questionrow,qrid}
 	            {x2;eval: v:tid++}
 				<div class="box itembox paperexamcontent">
 					<h4 class="title">第{x2;v:tid}题</h4>
