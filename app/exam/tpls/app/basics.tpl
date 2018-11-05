@@ -36,7 +36,7 @@
 				</div>
 				{x2;endif}
 				{x2;if:!$data['currentbasic']['basicexam']['model'] || $data['currentbasic']['basicexam']['model'] == 2}
-				<div class="col-xs-3" style="width:20%">
+				<div class="col-xs-3" style="display:none;width:20%">
 					<a href="index.php?exam-app-exam" class="thumbnail" style="border:0px;">
 						<img src="app/core/styles/img/t3.png" alt="" width="100%">
 					</a>

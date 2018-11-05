@@ -19,8 +19,11 @@
 				<legend class="text-center"><h3>{x2;$sessionvars['examsession']}</h3></legend>
 				{x2;if:$data['currentbasic']['basicexam']['notviewscore']}
 				<div class="col-xs-12 alert alert-info">
-					<p>您已经成功交卷，请等待教师统计并公布分数。</p>
+					<p>您已经成功交卷，请等待系统统计并公布分数。</p>
 				</div>
+				<div class="text-center">
+                   <a href="index.php?user-prd-logout" class="btn btn-info ajax">退出系统</a>
+                </div>
 				{x2;else}
 				<div class="col-xs-4">
             		<div class="boardscore">
