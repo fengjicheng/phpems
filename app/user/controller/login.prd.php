@@ -53,22 +53,36 @@ class action extends prd
 				}
 				else
 				{
+					//$message = array(
+					//	'statusCode' => 300,
+					//	'errorinput' => 'args[username]',
+					//	"message" => "登录失败，因为用户名或密码错误"
+					//);
 					$message = array(
-						'statusCode' => 300,
-						'errorinput' => 'args[username]',
-						"message" => "登录失败，因为用户名或密码错误"
+						'statusCode' => 201,
+						"message" => "登录失败，因为用户名或密码错误",
+					    "callbackType" => 'forward',
+					    "forwardUrl" => "index.php?user-prd-login"
 					);
-					exit(json_encode($message));
+					$this->G->R($message);
+					//exit(json_encode($message));
 				}
 			}
 			else
 			{
+				//$message = array(
+				//	'statusCode' => 300,
+				//	'errorinput' => 'args[username]',
+				//	"message" => "登录失败，因为用户名不存在"
+				//);
 				$message = array(
-					'statusCode' => 300,
-					'errorinput' => 'args[username]',
-					"message" => "登录失败，因为用户名不存在"
+				    'statusCode' => 201,
+				    "message" => "登录失败，因为用户名不存在",
+				    "callbackType" => 'forward',
+				    "forwardUrl" => "index.php?user-prd-login"
 				);
-				exit(json_encode($message));
+				$this->G->R($message);
+				//exit(json_encode($message));
 			}
 		}
 		else
